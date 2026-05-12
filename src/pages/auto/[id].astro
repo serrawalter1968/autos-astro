@@ -1,0 +1,810 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { autos } from '../../data/autos.js';
+
+export function getStaticPaths() {
+  return autos.map((auto) => ({
+    params: { id: auto.id.toString() },
+    props: { auto },
+  }));
+}
+
+const { auto } = Astro.props;
+
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+};
+---
+
+<Layout title={auto.nombre}>
+  <div class="car-detail">
+    <div class="car-hero">
+      <div class="car-hero-image">
+        <img src={auto.imagen} alt={auto.nombre} />
+        <div class="car-hero-overlay"></div>
+      </div>
+      <div class="car-hero-content">
+        <span class="car-brand">{auto.marca}</span>
+        <h1 class="car-title">{auto.nombre}</h1>
+        <div class="car-price-tag">
+          <span class="price-label">Precio</span>
+          <span class="price-value">{formatPrice(auto.precio)}</span>
+        </div>
+      </div>
+      <a href="/" class="back-link">← Volver al Catálogo</a>
+    </div>
+
+    <div class="container">
+      <div class="car-overview">
+        <div class="overview-main">
+          <h2 class="section-heading">Descripción</h2>
+          <p class="overview-text">{auto.descripcion}</p>
+        </div>
+        <div class="overview-stats">
+          <div class="stat-item">
+            <span class="stat-label">Potencia</span>
+            <span class="stat-value">{auto.especificaciones.potencia}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">0-100 km/h</span>
+            <span class="stat-value">{auto.especificaciones.aceleracion}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Vel. Máxima</span>
+            <span class="stat-value">{auto.especificaciones.velocidadMax}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="specs-section">
+        <h2 class="section-heading">
+          <span class="heading-icon">⚙</span>
+          Especificaciones Técnicas
+        </h2>
+        <div class="specs-grid">
+          <div class="spec-card">
+            <div class="spec-header">
+              <span class="spec-icon">🔧</span>
+              <h3>Motor</h3>
+            </div>
+            <p class="spec-value">{auto.especificaciones.motor}</p>
+          </div>
+          <div class="spec-card">
+            <div class="spec-header">
+              <span class="spec-icon">⚡</span>
+              <h3>Potencia</h3>
+            </div>
+            <p class="spec-value">{auto.especificaciones.potencia}</p>
+          </div>
+          <div class="spec-card">
+            <div class="spec-header">
+              <span class="spec-icon">🔄</span>
+              <h3>Torque</h3>
+            </div>
+            <p class="spec-value">{auto.especificaciones.torque}</p>
+          </div>
+          <div class="spec-card">
+            <div class="spec-header">
+              <span class="spec-icon">⚙</span>
+              <h3>Transmisión</h3>
+            </div>
+            <p class="spec-value">{auto.especificaciones.transmision}</p>
+          </div>
+          <div class="spec-card">
+            <div class="spec-header">
+              <span class="spec-icon">🔒</span>
+              <h3>Tracción</h3>
+            </div>
+            <p class="spec-value">{auto.especificaciones.traccion}</p>
+          </div>
+          <div class="spec-card">
+            <div class="spec-header">
+              <span class="spec-icon">🏎</span>
+              <h3>Rendimiento</h3>
+            </div>
+            <p class="spec-value">{auto.especificaciones.aceleracion}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-section">
+        <h2 class="section-heading">
+          <span class="heading-icon">📱</span>
+          Tecnología y Conectividad
+        </h2>
+        <div class="tech-grid">
+          {auto.tecnologia.map((tech, index) => (
+            <div class="tech-item" style={`animation-delay: ${index * 0.1}s`}>
+              <div class="tech-check">✓</div>
+              <span class="tech-text">{tech}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="safety-section">
+        <h2 class="section-heading">
+          <span class="heading-icon">🛡</span>
+          Sistemas de Seguridad
+        </h2>
+        <div class="safety-grid">
+          {auto.seguridad.map((item, index) => (
+            <div class="safety-item" style={`animation-delay: ${index * 0.1}s`}>
+              <div class="safety-icon">●</div>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="colors-section">
+        <h2 class="section-heading">
+          <span class="heading-icon">🎨</span>
+          Colores Disponibles
+        </h2>
+        <div class="colors-list">
+          {auto.colores.map((color) => (
+            <div class="color-item">
+              <div class="color-swatch" data-color={color}></div>
+              <span class="color-name">{color}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <div class="cta-content">
+          <h2>¿Interesado en este vehículo?</h2>
+          <p>Contáctanos hoy mismo para más información o para agendar una prueba de manejo.</p>
+          <div class="cta-buttons">
+            <button class="btn btn-primary" onclick="openModal('testDrive')">Agendar Prueba de Manejo</button>
+            <a href="/contacto" class="btn btn-outline">Solicitar Información</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="testDriveModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('testDrive')">&times;</span>
+      <h2>Agenda tu Prueba de Manejo</h2>
+      <p class="modal-subtitle">Completa el formulario y te contactaremos para confirmar tu cita</p>
+      
+      <form class="test-drive-form" onsubmit="submitTestDrive(event)">
+        <input type="hidden" name="vehiculo" value={auto.nombre} />
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="td-nombre">Nombre Completo *</label>
+            <input type="text" id="td-nombre" name="nombre" required placeholder="Tu nombre completo" />
+          </div>
+          <div class="form-group">
+            <label for="td-telefono">Teléfono *</label>
+            <input type="tel" id="td-telefono" name="telefono" required placeholder="+1 (555) 000-0000" />
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="td-email">Email *</label>
+            <input type="email" id="td-email" name="email" required placeholder="tu@email.com" />
+          </div>
+          <div class="form-group">
+            <label for="td-fecha">Fecha Preferida *</label>
+            <input type="date" id="td-fecha" name="fecha" required />
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="td-horario">Horario Preferido</label>
+          <select id="td-horario" name="horario">
+            <option value="">Selecciona un horario</option>
+            <option value="mañana">Mañana (9:00 - 12:00)</option>
+            <option value="tarde">Tarde (14:00 - 18:00)</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="td-mensaje">Comentarios Adicionales</label>
+          <textarea id="td-mensaje" name="mensaje" rows="3" placeholder="¿Alguna consideración especial?"></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Confirmar Solicitud</button>
+      </form>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .car-detail {
+    padding-bottom: 6rem;
+  }
+
+  .car-hero {
+    position: relative;
+    height: 70vh;
+    min-height: 500px;
+    display: flex;
+    align-items: flex-end;
+    padding: 4rem 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .car-hero-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .car-hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .car-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(10, 10, 10, 0.3) 0%,
+      rgba(10, 10, 10, 0.6) 50%,
+      rgba(10, 10, 10, 0.95) 100%
+    );
+  }
+
+  .car-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .car-brand {
+    display: inline-block;
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .car-title {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+  }
+
+  .car-price-tag {
+    display: inline-flex;
+    flex-direction: column;
+    background: var(--gradient);
+    padding: 1rem 2rem;
+  }
+
+  .price-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(26, 26, 26, 0.7);
+  }
+
+  .price-value {
+    font-size: 1.8rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .back-link {
+    position: absolute;
+    top: 100px;
+    left: 2rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    z-index: 10;
+    transition: color 0.3s;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .section-heading {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .heading-icon {
+    color: var(--accent);
+  }
+
+  .car-overview {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    margin-bottom: 6rem;
+    padding: 2rem;
+    background: var(--bg-card);
+    border-radius: 4px;
+  }
+
+  .overview-text {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .overview-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(201, 169, 98, 0.05);
+    border-left: 3px solid var(--accent);
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .stat-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .specs-section {
+    margin-bottom: 6rem;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .spec-card {
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: all 0.3s;
+  }
+
+  .spec-card:hover {
+    border-color: rgba(201, 169, 98, 0.3);
+  }
+
+  .spec-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .spec-icon {
+    font-size: 1.2rem;
+  }
+
+  .spec-header h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+  }
+
+  .spec-value {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    font-weight: 500;
+  }
+
+  .tech-section {
+    margin-bottom: 6rem;
+  }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .tech-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--bg-card);
+    border-radius: 4px;
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+    transition: all 0.3s;
+  }
+
+  .tech-item:hover {
+    background: rgba(201, 169, 98, 0.1);
+  }
+
+  .tech-check {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+
+  .tech-text {
+    color: var(--text-light);
+    font-size: 0.95rem;
+  }
+
+  .safety-section {
+    margin-bottom: 6rem;
+  }
+
+  .safety-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .safety-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--bg-card);
+    border-radius: 4px;
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+    transition: all 0.3s;
+  }
+
+  .safety-item:hover {
+    transform: translateX(5px);
+  }
+
+  .safety-icon {
+    color: #4ade80;
+    font-size: 0.8rem;
+  }
+
+  .safety-item span {
+    color: var(--text-light);
+    font-size: 0.95rem;
+  }
+
+  .colors-section {
+    margin-bottom: 6rem;
+  }
+
+  .colors-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .color-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .color-swatch {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s;
+  }
+
+  .color-item:hover .color-swatch {
+    border-color: var(--accent);
+    transform: scale(1.1);
+  }
+
+  .color-swatch[data-color*="Negro"] {
+    background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+  }
+
+  .color-swatch[data-color*="Plata"] {
+    background: linear-gradient(135deg, #c0c0c0, #808080);
+  }
+
+  .color-swatch[data-color*="Azul"] {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  }
+
+  .color-swatch[data-color*="Blanco"] {
+    background: linear-gradient(135deg, #ffffff, #e5e5e5);
+  }
+
+  .color-swatch[data-color*="Rojo"] {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+  }
+
+  .color-swatch[data-color*="Verde"] {
+    background: linear-gradient(135deg, #059669, #047857);
+  }
+
+  .color-swatch[data-color*="Gris"] {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+  }
+
+  .color-swatch[data-color*="Amarillo"] {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  }
+
+  .color-swatch[data-color*="Naranja"] {
+    background: linear-gradient(135deg, #ea580c, #c2410c);
+  }
+
+  .color-swatch[data-color*="Bianco"] {
+    background: linear-gradient(135deg, #ffffff, #f5f5f5);
+  }
+
+  .color-swatch[data-color*="Giallo"] {
+    background: linear-gradient(135deg, #facc15, #eab308);
+  }
+
+  .color-name {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .cta-section {
+    background: linear-gradient(135deg, var(--bg-card) 0%, #1f1f1f 100%);
+    padding: 4rem;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid rgba(201, 169, 98, 0.1);
+  }
+
+  .cta-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .cta-content p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 768px) {
+    .car-hero {
+      height: 60vh;
+      min-height: 400px;
+    }
+
+    .car-title {
+      font-size: 2.2rem;
+    }
+
+    .car-overview {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .specs-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .cta-section {
+      padding: 2rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+    }
+
+    .cta-buttons .btn {
+      width: 100%;
+    }
+
+    .back-link {
+      top: 90px;
+    }
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .modal.active {
+    display: flex;
+  }
+
+  .modal-content {
+    background: var(--bg-card);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2.5rem;
+    border-radius: 4px;
+    position: relative;
+    border: 1px solid rgba(201, 169, 98, 0.2);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  .modal-close:hover {
+    color: var(--accent);
+  }
+
+  .modal-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .modal-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .test-drive-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .test-drive-form .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .test-drive-form label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+  }
+
+  .test-drive-form input,
+  .test-drive-form select,
+  .test-drive-form textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.8rem;
+    color: var(--text-light);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    border-radius: 0;
+  }
+
+  .test-drive-form input:focus,
+  .test-drive-form select:focus,
+  .test-drive-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(201, 169, 98, 0.05);
+  }
+
+  .test-drive-form select {
+    cursor: pointer;
+  }
+
+  .test-drive-form .btn {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .test-drive-form .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  function openModal(modalId) {
+    document.getElementById(modalId + 'Modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId + 'Modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('testDriveModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeModal('testDrive');
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeModal('testDrive');
+    }
+  });
+
+  function submitTestDrive(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const formData = new FormData(form);
+    
+    const solicitud = {
+      id: Date.now(),
+      vehiculo: formData.get('vehiculo'),
+      nombre: formData.get('nombre'),
+      telefono: formData.get('telefono'),
+      email: formData.get('email'),
+      fecha: formData.get('fecha'),
+      horario: formData.get('horario'),
+      mensaje: formData.get('mensaje'),
+      fechaSolicitud: new Date().toISOString()
+    };
+    
+    let solicitudes = JSON.parse(localStorage.getItem('solicitudesPrueba') || '[]');
+    solicitudes.push(solicitud);
+    localStorage.setItem('solicitudesPrueba', JSON.stringify(solicitudes));
+    
+    form.reset();
+    alert('¡Gracias! Tu solicitud de prueba de manejo ha sido enviada. Te contactaremos pronto para confirmar tu cita.');
+    closeModal('testDrive');
+  }
+</script>

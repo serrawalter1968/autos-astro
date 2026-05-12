@@ -1,0 +1,509 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { autos } from '../data/autos.js';
+
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+};
+---
+
+<Layout title="Catálogo">
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="hero-title-main">Descubre</span>
+        <span class="hero-title-sub">Tu Próximo Vehículo</span>
+      </h1>
+      <p class="hero-text">
+        Una colección exclusiva de los automóviles más deseados del mundo, donde el lujo y el rendimiento se encuentran.
+      </p>
+      <a href="#catalogo" class="btn btn-primary">Explorar Catálogo</a>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">◆</div>
+          <h3>Garantía Total</h3>
+          <p>Todos nuestros vehículos incluyen garantía extendida y cobertura total.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">◆</div>
+          <h3>Entrega Inmediata</h3>
+          <p>Disponemos de inventario exclusivo para entrega inmediata de tu unidad.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">◆</div>
+          <h3>Financiamiento</h3>
+          <p>Planes de financiamiento competitivos adaptados a tus necesidades.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="catalogo" class="catalog">
+    <div class="container">
+      <h2 class="section-title">Nuestra Colección</h2>
+      <p class="section-subtitle">
+        Cada vehículo representa la máxima expresión de ingeniería, diseño y rendimiento
+      </p>
+
+      <div class="cars-grid">
+        {autos.map((auto, index) => (
+          <a href={`/auto/${auto.id}`} class="car-card" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="car-image">
+              <img src={auto.imagen} alt={auto.nombre} loading="lazy" />
+              <div class="car-badge">{auto.marca}</div>
+            </div>
+            <div class="car-content">
+              <h3 class="car-name">{auto.nombre}</h3>
+              <p class="car-description">{auto.descripcion.substring(0, 100)}...</p>
+              <div class="car-specs">
+                <span class="spec">{auto.especificaciones.potencia}</span>
+                <span class="spec-divider">|</span>
+                <span class="spec">{auto.especificaciones.aceleracion}</span>
+              </div>
+              <div class="car-footer">
+                <span class="car-price">{formatPrice(auto.precio)}</span>
+                <span class="car-cta">Ver Detalles →</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="contact">
+    <div class="container">
+      <div class="contact-wrapper">
+        <div class="contact-info">
+          <h2 class="section-title">¿Listo para tu nuevo auto?</h2>
+          <p class="section-subtitle">
+            Contáctanos hoy y descubre por qué somos la elección preferida de los amantes del lujo.
+          </p>
+          <div class="contact-details">
+            <div class="contact-item">
+              <span class="contact-label">Email</span>
+              <span class="contact-value">info@exclusiveautos.com</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-label">Teléfono</span>
+              <span class="contact-value">+1 (555) 123-4567</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-label">Dirección</span>
+              <span class="contact-value">123 Luxury Avenue, Beverly Hills, CA</span>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form">
+          <input type="text" placeholder="Tu Nombre" required />
+          <input type="email" placeholder="Tu Email" required />
+          <input type="tel" placeholder="Tu Teléfono" />
+          <select>
+            <option value="">Selecciona un vehículo de interés</option>
+            {autos.map((auto) => (
+              <option value={auto.nombre}>{auto.nombre}</option>
+            ))}
+          </select>
+          <textarea placeholder="Tu Mensaje" rows="4"></textarea>
+          <button type="submit" class="btn btn-primary">Enviar Consulta</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(201, 169, 98, 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 50%, rgba(201, 169, 98, 0.08) 0%, transparent 50%);
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a962' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .hero-content {
+    text-align: center;
+    z-index: 1;
+    max-width: 800px;
+    padding: 0 2rem;
+  }
+
+  .hero-title {
+    margin-bottom: 2rem;
+  }
+
+  .hero-title-main {
+    display: block;
+    font-size: 4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #f5f5f5 0%, #c9a962 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+
+  .hero-title-sub {
+    display: block;
+    font-size: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-top: 1rem;
+  }
+
+  .hero-text {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .features {
+    padding: 6rem 0;
+    background: var(--bg-card);
+    border-top: 1px solid rgba(201, 169, 98, 0.1);
+    border-bottom: 1px solid rgba(201, 169, 98, 0.1);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+
+  .feature-item {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  .feature-item h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--text-light);
+  }
+
+  .feature-item p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .catalog {
+    padding: 8rem 0;
+  }
+
+  .cars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2.5rem;
+  }
+
+  .car-card {
+    background: var(--bg-card);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  .car-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(201, 169, 98, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  }
+
+  .car-image {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+  }
+
+  .car-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .car-card:hover .car-image img {
+    transform: scale(1.05);
+  }
+
+  .car-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--gradient);
+    color: var(--primary);
+    padding: 0.4rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .car-content {
+    padding: 1.5rem;
+  }
+
+  .car-name {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    color: var(--text-light);
+  }
+
+  .car-description {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.5;
+  }
+
+  .car-specs {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .spec {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .spec-divider {
+    color: var(--text-muted);
+    opacity: 0.3;
+  }
+
+  .car-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .car-price {
+    font-size: 1.3rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+
+  .car-cta {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+
+  .car-card:hover .car-cta {
+    margin-right: -5px;
+  }
+
+  .contact {
+    padding: 8rem 0;
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+  }
+
+  .contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .contact-info .section-title,
+  .contact-info .section-subtitle {
+    text-align: left;
+  }
+
+  .contact-info .section-title::after {
+    margin: 1rem 0 0;
+  }
+
+  .contact-details {
+    margin-top: 3rem;
+  }
+
+  .contact-item {
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.3rem;
+  }
+
+  .contact-value {
+    color: var(--text-light);
+    font-size: 1.1rem;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .contact-form input,
+  .contact-form select,
+  .contact-form textarea {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.2rem;
+    color: var(--text-light);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    border-radius: 0;
+  }
+
+  .contact-form input:focus,
+  .contact-form select:focus,
+  .contact-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(201, 169, 98, 0.05);
+  }
+
+  .contact-form select {
+    cursor: pointer;
+  }
+
+  .contact-form select option {
+    background: var(--bg-card);
+    color: var(--text-light);
+  }
+
+  .contact-form textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  @media (max-width: 1024px) {
+    .hero-title-main {
+      font-size: 3rem;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-title-main {
+      font-size: 2.5rem;
+    }
+
+    .hero-title-sub {
+      font-size: 1rem;
+    }
+
+    .cars-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-wrapper {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-info .section-title,
+    .contact-info .section-subtitle {
+      text-align: center;
+    }
+
+    .contact-info .section-title::after {
+      margin: 1rem auto 0;
+    }
+
+    .contact-details {
+      text-align: center;
+    }
+  }
+</style>

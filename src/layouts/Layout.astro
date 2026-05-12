@@ -1,0 +1,282 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Exclusive Autos - Los mejores vehículos de lujo disponibles" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | Exclusive Autos</title>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-container">
+        <a href="/" class="logo">
+          <span class="logo-text">Exclusive</span>
+          <span class="logo-subtitle">Autos</span>
+        </a>
+        <nav class="nav">
+          <a href="/" class="nav-link">Inicio</a>
+          <a href="/#catalogo" class="nav-link">Catálogo</a>
+          <a href="/#contacto" class="nav-link">Contacto</a>
+        </nav>
+        <button class="menu-toggle" aria-label="Menú">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <span class="logo-text">Exclusive</span>
+          <span class="logo-subtitle">Autos</span>
+          <p class="footer-tagline">Donde el lujo encuentra su destino</p>
+        </div>
+        <div class="footer-links">
+          <h4>Enlaces</h4>
+          <a href="/">Inicio</a>
+          <a href="/#catalogo">Catálogo</a>
+          <a href="/contacto">Contacto</a>
+          <a href="/solicitudes">Solicitudes</a>
+        </div>
+        <div class="footer-contact">
+          <h4>Contacto</h4>
+          <p>info@exclusiveautos.com</p>
+          <p>+1 (555) 123-4567</p>
+        </div>
+        <div class="footer-social">
+          <h4>Síguenos</h4>
+          <div class="social-icons">
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="Facebook">FB</a>
+            <a href="#" aria-label="Twitter">X</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Exclusive Autos. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(201, 169, 98, 0.1);
+  }
+
+  .header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-light);
+  }
+
+  .logo-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .nav {
+    display: flex;
+    gap: 3rem;
+  }
+
+  .nav-link {
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    position: relative;
+    padding: 0.5rem 0;
+    transition: color 0.3s;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gradient);
+    transition: width 0.3s;
+  }
+
+  .nav-link:hover {
+    color: var(--accent);
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  .menu-toggle span {
+    width: 25px;
+    height: 2px;
+    background: var(--text-light);
+    transition: all 0.3s;
+  }
+
+  main {
+    padding-top: 80px;
+  }
+
+  .footer {
+    background: var(--bg-card);
+    padding: 4rem 0 2rem;
+    margin-top: 6rem;
+    border-top: 1px solid rgba(201, 169, 98, 0.1);
+  }
+
+  .footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+
+  .footer-brand .logo-text {
+    font-size: 2rem;
+  }
+
+  .footer-tagline {
+    color: var(--text-muted);
+    margin-top: 1rem;
+    font-style: italic;
+  }
+
+  .footer h4 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-links a,
+  .footer-contact p {
+    display: block;
+    color: var(--text-muted);
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+  }
+
+  .footer-links a:hover {
+    color: var(--accent);
+  }
+
+  .social-icons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .social-icons a {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    transition: all 0.3s;
+  }
+
+  .social-icons a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    margin-top: 3rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .footer-bottom p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 900px) {
+    .nav {
+      display: none;
+    }
+
+    .menu-toggle {
+      display: flex;
+    }
+
+    .footer-container {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .footer-container {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .social-icons {
+      justify-content: center;
+    }
+  }
+</style>
